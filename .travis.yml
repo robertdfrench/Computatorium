@@ -18,4 +18,4 @@ addons:
       - cmake
       - cmake-data
       - gcc-6
-- g++-6
+      - g++-6
