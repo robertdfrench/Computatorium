@@ -1,6 +1,10 @@
 language: cpp
 dist: trusty
-script: bash -ex test.sh
+script:
+  - mkdir -p build/
+  - cd build/
+  - cmake ..
+  - make test
 compiler:
   - g++-6
 env:
