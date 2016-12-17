@@ -1,0 +1,21 @@
+language: cpp
+dist: trusty
+script:
+  - mkdir -p build/
+  - cd build/
+  - cmake ..
+  - make test
+compiler:
+  - g++-6
+env:
+  - COMPILER=g++-6
+addons:
+  apt:
+    sources:
+      - george-edison55-precise-backports
+      - ubuntu-toolchain-r-test
+    packages:
+      - cmake
+      - cmake-data
+      - gcc-6
+      - g++-6
