@@ -3,6 +3,7 @@
 #pragma once
 
 #include "GameFramework/Pawn.h"
+#include "WorkerMovementComponent.h"
 #include "Worker.generated.h"
 
 UCLASS()
@@ -21,6 +22,7 @@ public:
 	virtual void Tick( float DeltaSeconds ) override;
 
 	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;	
-	
+	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
+    
+    class UWorkerMovementComponent* MovementComponent;
 };
