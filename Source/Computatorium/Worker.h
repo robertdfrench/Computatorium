@@ -25,4 +25,10 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
     
     class UWorkerMovementComponent* MovementComponent;
+    
+    virtual UPawnMovementComponent* GetMovementComponent() const override;
+    
+    void MoveForward(float AxisValue);
+    void MoveRight(float AxisValue);
+    void Turn(float AxisValue);
 };

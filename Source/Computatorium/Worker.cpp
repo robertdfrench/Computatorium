@@ -3,13 +3,11 @@
 #include "Computatorium.h"
 #include "Worker.h"
 
-
 // Sets default values
 AWorker::AWorker()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 
     // Our root component will be a sphere that reacts to physics
     USphereComponent* SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("RootComponent"));
@@ -40,6 +38,10 @@ AWorker::AWorker()
     UCameraComponent* Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("ActualCamera"));
     Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
     
+    // Create an instance of our movement component, and tell it to update the root.
+    MovementComponent = CreateDefaultSubobject<UWorkerMovementComponent>(TEXT("CustomMovementComponent"));
+    MovementComponent->UpdatedComponent = RootComponent;
+    
     // Take control of the default player
     AutoPossessPlayer = EAutoReceiveInput::Player0;
 }
@@ -58,10 +60,41 @@ void AWorker::Tick( float DeltaTime )
 
 }
 
+UPawnMovementComponent* AWorker::GetMovementComponent() const
+{
+    return MovementComponent;
+}
+
 // Called to bind functionality to input
 void AWorker::SetupPlayerInputComponent(class UInputComponent* InputComponent)
 {
 	Super::SetupPlayerInputComponent(InputComponent);
+    
+    InputComponent->BindAxis("MoveForward", this, &AWorker::MoveForward);
+    InputComponent->BindAxis("MoveRight", this, &AWorker::MoveRight);
+    InputComponent->BindAxis("Turn", this, &AWorker::Turn);
+}
 
+void AWorker::MoveForward(float AxisValue)
+{
+    if (MovementComponent && (MovementComponent->UpdatedComponent == RootComponent))
+    {
+        MovementComponent->AddInputVector(GetActorForwardVector() * AxisValue);
+    }
+}
+
+void AWorker::MoveRight(float AxisValue)
+{
+    if (MovementComponent && (MovementComponent->UpdatedComponent == RootComponent))
+    {
+        MovementComponent->AddInputVector(GetActorRightVector() * AxisValue);
+    }
+}
+
+void AWorker::Turn(float AxisValue)
+{
+    FRotator NewRotation = GetActorRotation();
+    NewRotation.Yaw += AxisValue;
+    SetActorRotation(NewRotation);
 }
 
